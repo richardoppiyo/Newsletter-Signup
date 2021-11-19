@@ -18,6 +18,10 @@ app.get("/",function(req,res){
 // API KEY -  668ade3e7d45d1a0d0c855e05dbbe94d-us20
 // nwe api key - aed2cc76f2b330fa0a04b5e3bf086a56-us20
 // List id -  3d9c56cfd9.
+app.post("/failure",function(req,res){
+  res.redirect("/");
+})
+
 
 app.post("/",function(req,res){
   const firstName = req.body.firstName;
@@ -27,7 +31,7 @@ app.post("/",function(req,res){
   const url = "https://us20.api.mailchimp.com/3.0/lists/3d9c56cfd9";
   const options = {
     method: "POST",
-    auth: "richie:"
+    auth: "richie:aed2cc76f2b330fa0a04b5e3bf086a56-us20"
   }
   const data = {
     members:
@@ -53,6 +57,12 @@ app.post("/",function(req,res){
   const jsonData = JSON.stringify(data);
 
   var request = https.request(url,options,function(response){
+    if(response.statusCode === 200){
+      res.sendFile(__dirname + "/success.html");
+    }else{
+      res.sendFile(__dirname + "/failure.html");
+    }
+
     response.on("data",function(data){
       console.log("passed");
       console.log(JSON.parse(data));
